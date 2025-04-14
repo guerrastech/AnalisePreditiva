@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard de Previsões</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../static/style-dashboard.css">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style-dashboard.css') }}"
+    />
+</head>
+<body>
+
+    <header>
+        <div class="titulo_page">
+            <h2>Dashboard de Previsões</h2>
+          </div>
+        
+    
+        <nav class="menu-desktop">
+            <ul>
+              <li><a href="">Home</a></li>
+              <li><a href="/NovaConsulta">Nova Consulta</a></li>
+              <li><a href="dashboard">Dashboard</a></li>
+            </ul>
+          </nav>
+    
+        </header>
+
+
+  
+
+  <h3>Distribuição das classes preditas</h3>
+  <div style="max-width: 500px; margin: auto;">
+  <canvas id="pieChart"></canvas>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      const pieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['<= 50K', '> 50K'],
+          datasets: [{
+            data: [{{ percentual_0|round(2) }}, {{ percentual_1|round(2) }}],
+            backgroundColor: ['#36A2EB', '#FF6384'],
+            hoverOffset: 10
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom',
+            },
+            title: {
+              display: true,
+              text: 'Percentual de cada classe'
+            }
+          }
+        }
+      });
+    });
+  </script>
+
+  <h3>Dados Armazenados</h3>
+  <table>
+    <tr>
+      <th>Idade</th>
+      <th>Gênero</th>
+      <th>Ocupação</th>
+      <th>Educação</th>
+      <th>Capital</th>
+      <th>Previsão</th>
+    </tr>
+    {% for d in dados %}
+    <tr>
+      <td>{{ d.idade }}</td>
+      <td>{{ d.genero }}</td>
+      <td>{{ d.ocupacao }}</td>
+      <td>{{ d.educacao }}</td>
+      <td>{{ d.capital_gain }}</td>
+      <td>{{ d.previsao }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+</body>
+</html>

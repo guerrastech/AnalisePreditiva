@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modelo Preditivo - Formulário de Entrada</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+
+<header>
+    <div class="titulo_page">
+        <h2>Previsão com Modelo Preditivo</h2>
+      </div>
+    
+
+    <nav class="menu-desktop">
+        <ul>
+          <li><a href="">Home</a></li>
+          <li><a href="">Nova Consulta</a></li>
+          <li><a href="dashboard">Dashboard</a></li>
+        </ul>
+      </nav>
+
+    </header>
+
+
+    <div class="containe_form">
+
+        <div class="conteine_dados">
+    
+    <form action="/" method="POST">
+    
+        <div class="dado">
+        <label for="age">Idade:</label>
+      <input
+        type="number"
+        id="age"
+        name="age"
+        placeholder="Digite sua idade"
+        required
+      />
+    </div>
+    
+      <div class="dado">
+      <label for="sex">Gênero:</label>
+      <select id="sex" name="sex" required>
+        <option value="" disabled selected>Selecione</option>
+        <option value="1">Masculino</option>
+        <option value="2">Feminino</option>
+      </select>
+      </div>
+
+      <div class="dado">
+      <label for="occupation">Setor de Trabalho:</label>
+      <select id="occupation" name="occupation" required>
+        <option value="" disabled selected>Selecione</option>
+        <option value="1">Administrativo e de escritório</option>
+        <option value="2">Executivo e gerencial</option>
+        <option value="3">Manipuladores e limpadores</option>
+        <option value="4">Profissional especializado</option>
+        <option value="5">Outros serviços</option>
+        <option value="6">Vendas</option>
+        <option value="7">Artesanato e reparos</option>
+        <option value="8">Transporte e movimentação</option>
+        <option value="9">Agricultura e pesca</option>
+        <option value="10">Operador de máquina e inspeção</option>
+        <option value="11">Suporte técnico</option>
+        <option value="12">Desconhecido</option>
+        <option value="13">Serviços de proteção</option>
+        <option value="14">Forças armadas</option>
+        <option value="15">Serviços domésticos privados</option>
+      </select>
+    </div>
+
+      <div class="dado">
+      <label for="education-num">Tempo de educacao (anos):</label>
+      <input
+        type="number"
+        id="education-num"
+        name="education-num"
+        placeholder="Digite o tempo de estudo no caso o tempo total que voce passou numa institução de ensino leve em consideração graduaÇÃO E PÓS"
+        required
+      />
+      </div>
+
+      <div class="dado">
+      <label for="capital-gain">Capital Ganho:</label>
+      <input
+        type="number"
+        id="capital-gain"
+        name="capital-gain"
+        placeholder="Digite o valor do seu capital ganho anualmente"
+        required
+      />
+      <div class="dado"></div>
+
+      <button type="submit">Enviar Dados</button>
+    </form>
+</div>
+
+</div>
+</div>
+
+    {% if previsao is not none %}
+    <div class="resultado">
+      <h3>Resultado da Previsão:</h3>
+      <p>A previsão para o seu perfil é: {{ previsao }}</p>
+    </div>
+    {% endif %}
+  </body>
+</html>
