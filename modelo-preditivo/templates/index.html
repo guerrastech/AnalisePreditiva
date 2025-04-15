@@ -4,10 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Modelo Preditivo - Formulário de Entrada</title>
-    <link rel="stylesheet" href="../static/style.css">
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
+      href="{{ url_for('static', filename='css/style.css') }}"
     />
   </head>
   <body>
@@ -20,8 +19,8 @@
 
     <nav class="menu-desktop">
         <ul>
-          <li><a href="">Home</a></li>
-          <li><a href="">Nova Consulta</a></li>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/NovaConsulta">Nova Consulta</a></li>
           <li><a href="dashboard">Dashboard</a></li>
         </ul>
       </nav>
@@ -33,7 +32,7 @@
 
         <div class="conteine_dados">
     
-    <form action="/" method="POST">
+    <form action="/NovaConsulta" method="POST">
     
         <div class="dado">
         <label for="age">Idade:</label>

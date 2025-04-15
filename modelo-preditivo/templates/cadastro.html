@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro</title>
+  <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styleCadastroPage.css') }}"
+    />
+</head>
+<body>
+  <div class="cadastro-container">
+    <h2>Cadastro</h2>
+    <form method="POST" action="/cadastro">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" required>
+
+      <button type="submit">Cadastrar</button>
+
+      {% if erro %}
+        <div class="mensagem-erro">{{ erro }}</div>
+      {% endif %}
+    </form>
+
+    <div class="link-login">
+      Já tem conta? <a href="/login">Faça login</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../static/style-dashboard.css" />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='style-dashboard.css') }}"
+      href="{{ url_for('static', filename='css/style-dashboard.css') }}"
     />
   </head>
   <body>
@@ -15,26 +15,31 @@
       <div class="titulo_page">
         <h2>Dashboard de Previsões</h2>
       </div>
-
+    
       <nav class="menu-desktop">
         <ul>
-          <li><a href="">Home</a></li>
+          <li><a href="/home">Home</a></li>
           <li><a href="/NovaConsulta">Nova Consulta</a></li>
-          <li><a href="dashboard">Dashboard</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
         </ul>
       </nav>
     </header>
 
+    <div class="titulos">
     <h3 id="titulo-classes">Distribuição das classes preditas</h3>
     <h3 id="titulo-genero">Percentual de Homens e Mulheres que Ganham > 50K</h3>
     <h3 id="titulo-ocupacao">Percentual com Renda > 50K por Ocupação</h3>
     
+  </div>
+
     <div style="max-width: 900px; margin: auto;">
       <canvas id="graficoUnico"></canvas>
     </div>
 
 
+    <div class="titulos">
     <h3>Dados Armazenados</h3>
+  </div>
     <table>
       <tr>
         <th>Idade</th>
@@ -59,74 +64,18 @@
 
 
 
-
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const ctx = document.getElementById('graficoUnico').getContext('2d');
-      
-        // Inicializa o gráfico com dados vazios
-        const grafico = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: [],
-            datasets: [{
-              label: '',
-              data: [],
-              backgroundColor: [],
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { display: false },
-              title: { display: true, text: '' }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-                ticks: {
-                  callback: value => value + '%'
-                }
-              }
-            }
-          }
-        });
-      
-        // 🎯 Funções para atualizar os dados conforme o gráfico desejado
-        function mostrarGraficoClasses() {
-          grafico.data.labels = ['<= 50K', '> 50K'];
-          grafico.data.datasets[0].data = [{{ percentual_0|round(2) }}, {{ percentual_1|round(2) }}];
-          grafico.data.datasets[0].backgroundColor = ['#36A2EB', '#FF6384'];
-          grafico.options.plugins.title.text = 'Distribuição das Classes Preditas';
-          grafico.update();
-        }
-      
-        function mostrarGraficoGenero() {
-          grafico.data.labels = ['Homens', 'Mulheres'];
-          grafico.data.datasets[0].data = [{{ percentual_homens_mais_50k|round(2) }}, {{ percentual_mulheres_mais_50k|round(2) }}];
-          grafico.data.datasets[0].backgroundColor = ['#4B9CD3', '#F675A8'];
-          grafico.options.plugins.title.text = 'Percentual com Renda > 50K por Gênero';
-          grafico.update();
-        }
-      
-        function mostrarGraficoOcupacao() {
-          grafico.data.labels = {{ labels_ocupacao|tojson }};
-          grafico.data.datasets[0].data = {{ percentuais_ocupacao|tojson }};
-          grafico.data.datasets[0].backgroundColor = '#36A2EB';
-          grafico.options.plugins.title.text = 'Percentual com Renda > 50K por Ocupação';
-          grafico.update();
-        }
-      
-        
-        document.getElementById('titulo-classes').addEventListener('mouseover', mostrarGraficoClasses);
-        document.getElementById('titulo-genero').addEventListener('mouseover', mostrarGraficoGenero);
-        document.getElementById('titulo-ocupacao').addEventListener('mouseover', mostrarGraficoOcupacao);
-      
-        // Mostra o primeiro gráfico por padrão
-        mostrarGraficoClasses();
-      });
-      </script>
+      window.percentualLabelsClasses = ['<= 50K', '> 50K'];
+      window.percentualDataClasses = [{{ percentual_0|round(2) }}, {{ percentual_1|round(2) }}];
+      window.percentualGenero = [{{ percentual_homens_mais_50k|round(2) }}, {{ percentual_mulheres_mais_50k|round(2) }}];
+      window.labelsOcupacao = {{ labels_ocupacao|tojson }};
+      window.percentuaisOcupacao = {{ percentuais_ocupacao|tojson }};
+    </script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
       
   </body>
 </html>

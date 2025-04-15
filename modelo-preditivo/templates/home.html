@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modelo Preditivo - Home</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styleHomaPage.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="titulo_page">
+        <h2>Previsão com Modelo Preditivo</h2>
+      </div>
+
+      <nav class="menu-desktop">
+        <ul>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/NovaConsulta">Nova Consulta</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="containe_form">
+      <div class="conteine_dados">
+        <h3>Escolha uma opção para continuar</h3>
+        <a href="/NovaConsulta" class="btn">Nova Consulta</a>
+        <a href="/dashboard" class="btn">Dashboard</a>
+      </div>
+    </div>
+
+  </body>
+</html>
