@@ -1,90 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard de Previsões</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="../static/style-dashboard.css">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard de Previsões</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../static/style-dashboard.css" />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style-dashboard.css') }}"
     />
-</head>
-<body>
-
+  </head>
+  <body>
     <header>
-        <div class="titulo_page">
-            <h2>Dashboard de Previsões</h2>
-          </div>
-        
+      <div class="titulo_page">
+        <h2>Dashboard de Previsões</h2>
+      </div>
+
+      <nav class="menu-desktop">
+        <ul>
+          <li><a href="">Home</a></li>
+          <li><a href="/NovaConsulta">Nova Consulta</a></li>
+          <li><a href="dashboard">Dashboard</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <h3 id="titulo-classes">Distribuição das classes preditas</h3>
+    <h3 id="titulo-genero">Percentual de Homens e Mulheres que Ganham > 50K</h3>
+    <h3 id="titulo-ocupacao">Percentual com Renda > 50K por Ocupação</h3>
     
-        <nav class="menu-desktop">
-            <ul>
-              <li><a href="">Home</a></li>
-              <li><a href="/NovaConsulta">Nova Consulta</a></li>
-              <li><a href="dashboard">Dashboard</a></li>
-            </ul>
-          </nav>
-    
-        </header>
+    <div style="max-width: 900px; margin: auto;">
+      <canvas id="graficoUnico"></canvas>
+    </div>
 
 
-  
+    <h3>Dados Armazenados</h3>
+    <table>
+      <tr>
+        <th>Idade</th>
+        <th>Gênero</th>
+        <th>Ocupação</th>
+        <th>Educação</th>
+        <th>Capital Ganho</th>
+        <th>Previsão</th>
+      </tr>
+      {% for d in dados %}
+      <tr>
+        <td>{{ d.idade }}</td>
+        <td>{{ d.genero }}</td>
+        <td>{{ d.ocupacao }}</td>
+        <td>{{ d.educacao }}</td>
+        <td>{{ d.capital_gain }}</td>
+        <td>{{ d.previsao }}</td>
+      </tr>
+      {% endfor %}
+    </table>
 
-  <h3>Distribuição das classes preditas</h3>
-  <div style="max-width: 500px; margin: auto;">
-  <canvas id="pieChart"></canvas>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ctx = document.getElementById('pieChart').getContext('2d');
-      const pieChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ['<= 50K', '> 50K'],
-          datasets: [{
-            data: [{{ percentual_0|round(2) }}, {{ percentual_1|round(2) }}],
-            backgroundColor: ['#36A2EB', '#FF6384'],
-            hoverOffset: 10
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
+
+
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const ctx = document.getElementById('graficoUnico').getContext('2d');
+      
+        // Inicializa o gráfico com dados vazios
+        const grafico = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: [],
+            datasets: [{
+              label: '',
+              data: [],
+              backgroundColor: [],
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              title: { display: true, text: '' }
             },
-            title: {
-              display: true,
-              text: 'Percentual de cada classe'
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                  callback: value => value + '%'
+                }
+              }
             }
           }
+        });
+      
+        // 🎯 Funções para atualizar os dados conforme o gráfico desejado
+        function mostrarGraficoClasses() {
+          grafico.data.labels = ['<= 50K', '> 50K'];
+          grafico.data.datasets[0].data = [{{ percentual_0|round(2) }}, {{ percentual_1|round(2) }}];
+          grafico.data.datasets[0].backgroundColor = ['#36A2EB', '#FF6384'];
+          grafico.options.plugins.title.text = 'Distribuição das Classes Preditas';
+          grafico.update();
         }
+      
+        function mostrarGraficoGenero() {
+          grafico.data.labels = ['Homens', 'Mulheres'];
+          grafico.data.datasets[0].data = [{{ percentual_homens_mais_50k|round(2) }}, {{ percentual_mulheres_mais_50k|round(2) }}];
+          grafico.data.datasets[0].backgroundColor = ['#4B9CD3', '#F675A8'];
+          grafico.options.plugins.title.text = 'Percentual com Renda > 50K por Gênero';
+          grafico.update();
+        }
+      
+        function mostrarGraficoOcupacao() {
+          grafico.data.labels = {{ labels_ocupacao|tojson }};
+          grafico.data.datasets[0].data = {{ percentuais_ocupacao|tojson }};
+          grafico.data.datasets[0].backgroundColor = '#36A2EB';
+          grafico.options.plugins.title.text = 'Percentual com Renda > 50K por Ocupação';
+          grafico.update();
+        }
+      
+        
+        document.getElementById('titulo-classes').addEventListener('mouseover', mostrarGraficoClasses);
+        document.getElementById('titulo-genero').addEventListener('mouseover', mostrarGraficoGenero);
+        document.getElementById('titulo-ocupacao').addEventListener('mouseover', mostrarGraficoOcupacao);
+      
+        // Mostra o primeiro gráfico por padrão
+        mostrarGraficoClasses();
       });
-    });
-  </script>
-
-  <h3>Dados Armazenados</h3>
-  <table>
-    <tr>
-      <th>Idade</th>
-      <th>Gênero</th>
-      <th>Ocupação</th>
-      <th>Educação</th>
-      <th>Capital</th>
-      <th>Previsão</th>
-    </tr>
-    {% for d in dados %}
-    <tr>
-      <td>{{ d.idade }}</td>
-      <td>{{ d.genero }}</td>
-      <td>{{ d.ocupacao }}</td>
-      <td>{{ d.educacao }}</td>
-      <td>{{ d.capital_gain }}</td>
-      <td>{{ d.previsao }}</td>
-    </tr>
-    {% endfor %}
-  </table>
-
-</body>
+      </script>
+      
+  </body>
 </html>
