@@ -25,41 +25,50 @@
       </nav>
     </header>
 
-    <div class="titulos">
-    <h3 id="titulo-classes">Distribuição das classes preditas</h3>
-    <h3 id="titulo-genero">Percentual de Homens e Mulheres que Ganham > 50K</h3>
-    <h3 id="titulo-ocupacao">Percentual com Renda > 50K por Ocupação</h3>
-    
-  </div>
 
-    <div style="max-width: 900px; margin: auto;">
+
+    <div class="titulos">
+  <label for="select-grafico"><h3>Escolha o gráfico:</h3></label>
+  <select id="select-grafico">
+    <option value="classes">Distribuição das classes preditas</option>
+    <option value="genero">Percentual de Homens e Mulheres que Ganham > 50K</option>
+    <option value="ocupacao">Percentual com Renda > 50K por Ocupação</option>
+  </select>
+</div>
+
+    <div style=  " width: 100%; max-width: 900px; height: 500px; margin: auto;">
       <canvas id="graficoUnico"></canvas>
     </div>
 
 
     <div class="titulos">
-    <h3>Dados Armazenados</h3>
-  </div>
-    <table>
-      <tr>
-        <th>Idade</th>
-        <th>Gênero</th>
-        <th>Ocupação</th>
-        <th>Educação</th>
-        <th>Capital Ganho</th>
-        <th>Previsão</th>
-      </tr>
-      {% for d in dados %}
-      <tr>
-        <td>{{ d.idade }}</td>
-        <td>{{ d.genero }}</td>
-        <td>{{ d.ocupacao }}</td>
-        <td>{{ d.educacao }}</td>
-        <td>{{ d.capital_gain }}</td>
-        <td>{{ d.previsao }}</td>
-      </tr>
-      {% endfor %}
-    </table>
+      <h3>Dados Armazenados</h3>
+      <button id="btn-mostrar-tabela" class="btn-tabela">Mostrar Tabela</button>
+    </div>
+    
+    <div id="tabela-container" style="display: none;">
+      <table>
+        <tr>
+          <th>Idade</th>
+          <th>Gênero</th>
+          <th>Ocupação</th>
+          <th>Educação</th>
+          <th>Capital Ganho</th>
+          <th>Previsão</th>
+        </tr>
+        {% for d in dados %}
+        <tr>
+          <td>{{ d.idade }}</td>
+          <td>{{ d.genero }}</td>
+          <td>{{ d.ocupacao }}</td>
+          <td>{{ d.educacao }}</td>
+          <td>{{ d.capital_gain }}</td>
+          <td>{{ d.previsao }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    
 
 
 

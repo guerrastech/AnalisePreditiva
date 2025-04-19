@@ -56,14 +56,33 @@ document.addEventListener("DOMContentLoaded", function () {
       grafico.update();
     }
   
-    const tituloClasses = document.getElementById('titulo-classes');
-    const tituloGenero = document.getElementById('titulo-genero');
-    const tituloOcupacao = document.getElementById('titulo-ocupacao');
-  
-    if (tituloClasses) tituloClasses.addEventListener('mouseover', mostrarGraficoClasses);
-    if (tituloGenero) tituloGenero.addEventListener('mouseover', mostrarGraficoGenero);
-    if (tituloOcupacao) tituloOcupacao.addEventListener('mouseover', mostrarGraficoOcupacao);
-  
+    const selectGrafico = document.getElementById('select-grafico');
+
+selectGrafico.addEventListener('change', function () {
+  const valor = this.value;
+  if (valor === 'classes') {
     mostrarGraficoClasses();
+  } else if (valor === 'genero') {
+    mostrarGraficoGenero();
+  } else if (valor === 'ocupacao') {
+    mostrarGraficoOcupacao();
+  }
+});
+
+// Mostra gráfico padrão ao carregar
+mostrarGraficoClasses();
+  
+  });
+
+
+  document.getElementById("btn-mostrar-tabela").addEventListener("click", function () {
+    const tabela = document.getElementById("tabela-container");
+    if (tabela.style.display === "none") {
+      tabela.style.display = "block";
+      this.textContent = "Ocultar Tabela";
+    } else {
+      tabela.style.display = "none";
+      this.textContent = "Mostrar Tabela";
+    }
   });
   

@@ -1,5 +1,6 @@
-Flask==3.0.3
-numpy>=2.1.0
-scikit-learn>=1.6.1
-pandas>=2.2.2
-gunicorn
+Flask
+pymongo
+pandas
+scikit-learn
+numpy
+werkzeug
