@@ -1,5 +1,12 @@
 # 📊 Dashboard de Previsões com Flask e Machine Learning
 
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-000000?logo=flask)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?logo=mongodb)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Concluído-yellow)
+![Licença](https://img.shields.io/badge/Licença-MIT-blue)
+
 Este projeto é um sistema web desenvolvido com Flask que permite realizar previsões com base em dados enviados pelo usuário. Ele utiliza um modelo de Machine Learning (Random Forest) para classificar os dados e exibe os resultados por meio de um dashboard interativo com gráficos (barras). Os dados são armazenados em um banco de dados MongoDB.
 
 ---
@@ -33,11 +40,82 @@ Este projeto é um sistema web desenvolvido com Flask que permite realizar previ
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/seu-projeto.git
-cd seu-projeto
+git clone https://github.com/guerrastech/AnalisePreditiva.git
+cd modelo-preditivo
+```
+
+2. Crie e ative um ambiente virtual (opcional, mas recomendado):
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+```
+
+3. Instale as dependências:
+
+```bash
+pip install -r req.txt
+
+```
+
+4. Inicie o servidor Flask:
+
+```bash
+
+python run.py
+
+```
+
+5. Acesso o navegador:
+
+http://127.0.0.1:5000/login
 
 
+## ⚙️ Estrutura do Projeto
 
+```
+📁 app/
+ ├── routes/              # Arquivos de rotas Flask
+ ├── templates/           # Páginas HTML
+ ├── static/              # CSS, JS, imagens
+ ├── utils.py             # Funções auxiliares (ex: tradução, interpretação de resultados)
+ ├── conexaoBD.py         # Conexão com MongoDB
+ └── modelo/              # Modelo Random Forest (.pkl)
+
+📄 app.py                 # Arquivo principal Flask
+📄 requirements.txt
+📄 README.md
+
+```
+
+
+## 🧪 Exemplo de Uso
+
+1. Acesse a página inicial e faça uma nova consulta.
+2. Preencha os dados solicitados (ex: idade, ocupação, gênero, etc).
+3. O sistema faz a previsão com base no modelo treinado.
+4. Os resultados são salvos no MongoDB e exibidos no Dashboard com gráficos.
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Para contribuir:
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`)
+4. Faça push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+
+## 📜 Licença
+
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
+
+## 👥 Equipe
+
+- [Gabriel Guerra](https://github.com/guerrastech) - Desenvolvedor Backend
 
 
 
