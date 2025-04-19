@@ -67,7 +67,7 @@ python run.py
 
 ```
 
-5. Acesso o navegador:
+5. Acesse o navegador:
 
 http://127.0.0.1:5000/login
 
@@ -75,17 +75,31 @@ http://127.0.0.1:5000/login
 ## ⚙️ Estrutura do Projeto
 
 ```
-📁 app/
- ├── routes/              # Arquivos de rotas Flask
- ├── templates/           # Páginas HTML
- ├── static/              # CSS, JS, imagens
- ├── utils.py             # Funções auxiliares (ex: tradução, interpretação de resultados)
- ├── conexaoBD.py         # Conexão com MongoDB
- └── modelo/              # Modelo Random Forest (.pkl)
+projeto-ia/
+├── app/
+│   ├── __init__.py              # Inicialização do módulo Flask
+│   ├── conexaoBD.py             # Conexão com MongoDB
+│   ├── modelo.py                # Carregamento e uso do modelo preditivo
+│   ├── routes.py                # Rotas principais da aplicação
+│   ├── utils.py                 # Funções auxiliares
+│
+├── static/
+│   ├── css/                     # Arquivos CSS
+│   └── js/                      # Scripts JavaScript
+│
+├── templates/
+│   ├── cadastro.html            # Página de cadastro de usuários
+│   ├── dashboard.html          # Dashboard com gráficos
+│   ├── home.html                # Página principal
+│   ├── index.html               # Página inicial/login
+│   └── login.html               # Página de login
+│
+├── modelo_preditivo.pkl         # Modelo treinado (serializado com Pickle)
+├── income_evaluation.csv        # Base de dados utilizada
+├── run.py                       # Ponto de entrada principal da aplicação
+├── req.txt                      # Lista de dependências (requirements.txt)
+└── README.md                    # Documentação do projeto
 
-📄 app.py                 # Arquivo principal Flask
-📄 requirements.txt
-📄 README.md
 
 ```
 
