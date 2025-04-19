@@ -1,3 +1,7 @@
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from datetime import datetime
+
 def resultado_ocupacao(numero_correspondente):
     match numero_correspondente:
         case 1: return "Administrativo e de escritório"
@@ -19,3 +23,33 @@ def resultado_ocupacao(numero_correspondente):
 
 def traduzir_genero(valor):
     return "Masculino" if valor == 1 else "Feminino"
+
+
+def exportar_relatorio_pdf(path, estatisticas):
+    c = canvas.Canvas(path, pagesize=A4)
+    width, height = A4
+
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, height - 50, "Relatório de Previsões")
+
+    c.setFont("Helvetica", 12)
+    c.drawString(50, height - 80, f"Data de geração: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+
+    y = height - 120
+
+    for titulo, conteudo in estatisticas.items():
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(50, y, titulo)
+        y -= 20
+
+        c.setFont("Helvetica", 10)
+        for linha in conteudo:
+            c.drawString(70, y, linha)
+            y -= 15
+            if y < 50:
+                c.showPage()
+                y = height - 50
+
+        y -= 10  # espaço extra entre blocos
+
+    c.save()

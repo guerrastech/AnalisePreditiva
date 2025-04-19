@@ -78,6 +78,7 @@ http://127.0.0.1:5000/login
 projeto-ia/
 ├── app/
 │   ├── __init__.py              # Inicialização do módulo Flask
+|   ├── analises.py              # Inicialização do módulo Flask
 │   ├── conexaoBD.py             # Conexão com MongoDB
 │   ├── modelo.py                # Carregamento e uso do modelo preditivo
 │   ├── routes.py                # Rotas principais da aplicação

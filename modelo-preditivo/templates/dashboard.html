@@ -28,13 +28,15 @@
 
 
     <div class="titulos">
-  <label for="select-grafico"><h3>Escolha o gráfico:</h3></label>
-  <select id="select-grafico">
-    <option value="classes">Distribuição das classes preditas</option>
-    <option value="genero">Percentual de Homens e Mulheres que Ganham > 50K</option>
-    <option value="ocupacao">Percentual com Renda > 50K por Ocupação</option>
-  </select>
-</div>
+      <label for="select-grafico"><h3>Escolha o gráfico:</h3></label>
+      <select id="select-grafico">
+        <option value="classes">Distribuição das classes preditas</option>
+        <option value="genero">Percentual de Homens e Mulheres que Ganham > 50K</option>
+        <option value="ocupacao">Percentual com Renda > 50K por Ocupação</option>
+        <option value="faixaEtaria">Faixa Etária vs. Renda > 50K</option>
+        <option value="escolaridade">Escolaridade vs. Renda > 50K</option>
+      </select>
+    </div>
 
     <div style=  " width: 100%; max-width: 900px; height: 500px; margin: auto;">
       <canvas id="graficoUnico"></canvas>
@@ -45,6 +47,13 @@
       <h3>Dados Armazenados</h3>
       <button id="btn-mostrar-tabela" class="btn-tabela">Mostrar Tabela</button>
     </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="/exportar-relatorio">
+        <button class="btn-tabela">Exportar Relatório PDF</button>
+      </a>
+    </div>
+    
     
     <div id="tabela-container" style="display: none;">
       <table>
@@ -76,9 +85,17 @@
     <script>
       window.percentualLabelsClasses = ['<= 50K', '> 50K'];
       window.percentualDataClasses = [{{ percentual_0|round(2) }}, {{ percentual_1|round(2) }}];
+
       window.percentualGenero = [{{ percentual_homens_mais_50k|round(2) }}, {{ percentual_mulheres_mais_50k|round(2) }}];
+
       window.labelsOcupacao = {{ labels_ocupacao|tojson }};
       window.percentuaisOcupacao = {{ percentuais_ocupacao|tojson }};
+
+      window.labelsFaixaEtaria = {{ labels_faixa_etaria|tojson }};
+      window.valoresFaixaEtaria = {{ valores_faixa_etaria|tojson }};
+
+      window.labelsEscolaridade = {{ labels_escolaridade|tojson }};
+      window.percentuaisEscolaridade = {{ percentuais_escolaridade|tojson }};
     </script>
     
 

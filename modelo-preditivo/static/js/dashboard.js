@@ -1,88 +1,118 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const canvas = document.getElementById('graficoUnico');
-    if (!canvas) return;
-  
-    const ctx = canvas.getContext('2d');
-  
-    const grafico = new Chart(ctx, {
-      type: 'bar',
+const ctx = document.getElementById("graficoUnico").getContext("2d");
+
+let grafico = null;
+
+function criarGrafico(tipo) {
+  if (grafico) grafico.destroy();
+
+  if (tipo === "classes") {
+    grafico = new Chart(ctx, {
+      type: "bar",
       data: {
-        labels: [],
+        labels: window.percentualLabelsClasses,
         datasets: [{
-          label: '',
-          data: [],
-          backgroundColor: [],
+          label: "Distribuição das classes",
+          data: window.percentualDataClasses,
+          backgroundColor: ["#36a2eb", "#ff6384"]
+        }]
+      }
+    });
+
+  } else if (tipo === "genero") {
+    grafico = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Homens", "Mulheres"],
+        datasets: [{
+          label: "% com renda > 50K",
+          data: window.percentualGenero,
+          backgroundColor: ["#3498db", "#e74c3c"]
         }]
       },
       options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          title: { display: true, text: '' }
-        },
         scales: {
           y: {
             beginAtZero: true,
-            max: 100,
-            ticks: {
-              callback: value => value + '%'
-            }
+            max: 100
           }
         }
       }
     });
-  
-    function mostrarGraficoClasses() {
-      grafico.data.labels = window.percentualLabelsClasses;
-      grafico.data.datasets[0].data = window.percentualDataClasses;
-      grafico.data.datasets[0].backgroundColor = ['#36A2EB', '#FF6384'];
-      grafico.options.plugins.title.text = 'Distribuição das Classes Preditas';
-      grafico.update();
-    }
-  
-    function mostrarGraficoGenero() {
-      grafico.data.labels = ['Homens', 'Mulheres'];
-      grafico.data.datasets[0].data = window.percentualGenero;
-      grafico.data.datasets[0].backgroundColor = ['#4B9CD3', '#F675A8'];
-      grafico.options.plugins.title.text = 'Percentual com Renda > 50K por Gênero';
-      grafico.update();
-    }
-  
-    function mostrarGraficoOcupacao() {
-      grafico.data.labels = window.labelsOcupacao;
-      grafico.data.datasets[0].data = window.percentuaisOcupacao;
-      grafico.data.datasets[0].backgroundColor = '#36A2EB';
-      grafico.options.plugins.title.text = 'Percentual com Renda > 50K por Ocupação';
-      grafico.update();
-    }
-  
-    const selectGrafico = document.getElementById('select-grafico');
 
-selectGrafico.addEventListener('change', function () {
-  const valor = this.value;
-  if (valor === 'classes') {
-    mostrarGraficoClasses();
-  } else if (valor === 'genero') {
-    mostrarGraficoGenero();
-  } else if (valor === 'ocupacao') {
-    mostrarGraficoOcupacao();
+  } else if (tipo === "ocupacao") {
+    grafico = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: window.labelsOcupacao,
+        datasets: [{
+          label: "% com renda > 50K por ocupação",
+          data: window.percentuaisOcupacao,
+          backgroundColor: "#2ecc71"
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+
+  } else if (tipo === "faixaEtaria") {
+    grafico = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: window.labelsFaixaEtaria,
+        datasets: [{
+          label: "% com renda > 50K por faixa etária",
+          data: window.valoresFaixaEtaria,
+          backgroundColor: "#9b59b6"
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+
+  } else if (tipo === "escolaridade") {
+    grafico = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: window.labelsEscolaridade,
+        datasets: [{
+          label: "% com renda > 50K por escolaridade",
+          data: window.percentuaisEscolaridade,
+          backgroundColor: "#f39c12"
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
   }
+}
+
+document.getElementById("select-grafico").addEventListener("change", (e) => {
+  criarGrafico(e.target.value);
 });
 
-// Mostra gráfico padrão ao carregar
-mostrarGraficoClasses();
-  
-  });
+// Exibe o primeiro gráfico ao carregar a página
+criarGrafico("classes");
 
-
-  document.getElementById("btn-mostrar-tabela").addEventListener("click", function () {
-    const tabela = document.getElementById("tabela-container");
-    if (tabela.style.display === "none") {
-      tabela.style.display = "block";
-      this.textContent = "Ocultar Tabela";
-    } else {
-      tabela.style.display = "none";
-      this.textContent = "Mostrar Tabela";
-    }
-  });
-  
+// Botão mostrar/ocultar tabela
+document.getElementById("btn-mostrar-tabela").addEventListener("click", () => {
+  const tabela = document.getElementById("tabela-container");
+  tabela.style.display = tabela.style.display === "none" ? "block" : "none";
+});

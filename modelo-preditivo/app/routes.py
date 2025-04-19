@@ -1,10 +1,15 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, send_file
 import numpy as np
 import pickle
 from collections import Counter
 from app.conexaoBD import connect_database
-from app.utils import resultado_ocupacao, traduzir_genero
+from app.utils import resultado_ocupacao, traduzir_genero, exportar_relatorio_pdf
 from werkzeug.security import check_password_hash, generate_password_hash
+from app.analises import (
+    preparar_dados, analise_renda_total, analise_genero_renda,
+    analise_ocupacao, analise_faixa_etaria, analise_escolaridade
+)
+
 
 
 main = Blueprint('main', __name__)
@@ -62,54 +67,80 @@ def index():
 @main.route("/dashboard")
 def dashboard():
     dados = list(collection.find({}, {"_id": 0}))
+    dados = preparar_dados(dados)
 
-    for d in dados:
-        d["ocupacao"] = resultado_ocupacao(d["ocupacao"])
-        d["genero"] = traduzir_genero(d["genero"])
-
-    total = len(dados)
-    contagem = Counter([d["previsao"] for d in dados])
-    
-    percentual_0 = (contagem.get("<= 50K", 0) / total) * 100 if total else 0
-    percentual_1 = (contagem.get("> 50K", 0) / total) * 100 if total else 0
-
-
-
-
-    ocupacoes = list(set(d["ocupacao"] for d in dados))  # pega nomes únicos já traduzidos
-    ocupacoes.sort()  
-
-    labels_ocupacao = []
-    percentuais_ocupacao = []
-
-    for ocup in ocupacoes:
-        pessoas_na_ocup = [d for d in dados if d["ocupacao"] == ocup]
-        total_ocup = len(pessoas_na_ocup)
-        com_mais_50k = sum(1 for d in pessoas_na_ocup if d["previsao"] == "> 50K")
-        
-        percentual = (com_mais_50k / total_ocup) * 100 if total_ocup else 0
-        labels_ocupacao.append(ocup)
-        percentuais_ocupacao.append(round(percentual, 2))
-
-
-
-    homens = [d for d in dados if d["genero"] == "Masculino"]
-    mulheres = [d for d in dados if d["genero"] == "Feminino"]
-
-    homens_mais_50k = sum(1 for d in homens if d["previsao"] == "> 50K")
-    mulheres_mais_50k = sum(1 for d in mulheres if d["previsao"] == "> 50K")
-
-    percentual_homens_mais_50k = (homens_mais_50k / len(homens)) * 100 if homens else 0
-    percentual_mulheres_mais_50k = (mulheres_mais_50k / len(mulheres)) * 100 if mulheres else 0
+    percentual_0, percentual_1 = analise_renda_total(dados)
+    percentual_homens_mais_50k, percentual_mulheres_mais_50k = analise_genero_renda(dados)
+    labels_ocupacao, percentuais_ocupacao = analise_ocupacao(dados)
+    labels_faixa_etaria, valores_faixa_etaria = analise_faixa_etaria(dados)
+    labels_escolaridade, percentuais_escolaridade = analise_escolaridade(dados)
 
     return render_template("dashboard.html", 
-                           percentual_0=percentual_0, 
+                           percentual_0=percentual_0,
                            percentual_1=percentual_1,
                            percentual_homens_mais_50k=percentual_homens_mais_50k,
                            percentual_mulheres_mais_50k=percentual_mulheres_mais_50k,
                            labels_ocupacao=labels_ocupacao,
                            percentuais_ocupacao=percentuais_ocupacao,
+                           labels_faixa_etaria=labels_faixa_etaria,
+                           valores_faixa_etaria=valores_faixa_etaria,
+                           labels_escolaridade=labels_escolaridade,
+                           percentuais_escolaridade=percentuais_escolaridade,
                            dados=dados)
+
+
+@main.route("/exportar-relatorio")
+def exportar_relatorio():
+    dados = list(collection.find({}, {"_id": 0}))
+
+    # Cálculos de estatísticas
+    estatisticas = {
+        "Distribuição Geral das Classes": [
+            f"> 50K: {sum(d['previsao'] == '> 50K' for d in dados)}",
+            f"<= 50K: {sum(d['previsao'] == '<= 50K' for d in dados)}"
+        ],
+        "Faixa Etária vs Classe Preditiva": [],
+        "Escolaridade vs Classe Preditiva": [],
+        "Top 5 Ocupações com Maior Renda > 50K": []
+    }
+
+    # Faixa etária
+    faixas = [(18, 25), (26, 35), (36, 45), (46, 60), (61, 100)]
+    for faixa in faixas:
+        faixa_dados = [d for d in dados if faixa[0] <= d["idade"] <= faixa[1]]
+        if faixa_dados:
+            pct = sum(d["previsao"] == "> 50K" for d in faixa_dados) / len(faixa_dados) * 100
+            estatisticas["Faixa Etária vs Classe Preditiva"].append(f"{faixa[0]}–{faixa[1]} anos: {pct:.2f}% > 50K")
+
+    # Escolaridade
+    escolaridades = {}
+    for d in dados:
+        esc = d["educacao"]
+        if esc not in escolaridades:
+            escolaridades[esc] = []
+        escolaridades[esc].append(d["previsao"])
+    
+    for esc, previsoes in escolaridades.items():
+        pct = previsoes.count("> 50K") / len(previsoes) * 100
+        estatisticas["Escolaridade vs Classe Preditiva"].append(f"Educação {esc}: {pct:.2f}% > 50K")
+
+    # Ocupações
+    ocupacoes = {}
+    for d in dados:
+        d["ocupacao"] = resultado_ocupacao(d["ocupacao"])
+        ocup = d["ocupacao"]
+        if ocup not in ocupacoes:
+            ocupacoes[ocup] = []
+        ocupacoes[ocup].append(d["previsao"])
+    
+    top_ocup = sorted(ocupacoes.items(), key=lambda x: x[1].count("> 50K") / len(x[1]), reverse=True)[:5]
+    for ocup, previsoes in top_ocup:
+        pct = previsoes.count("> 50K") / len(previsoes) * 100
+        estatisticas["Top 5 Ocupações com Maior Renda > 50K"].append(f"{ocup}: {pct:.2f}%")
+
+    path = "relatorio_previsoes.pdf"
+    exportar_relatorio_pdf(path, estatisticas)
+    return send_file(path, as_attachment=True)
 
 
 @main.route("/cadastro", methods=["GET", "POST"])
