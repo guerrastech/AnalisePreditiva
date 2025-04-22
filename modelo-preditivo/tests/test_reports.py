@@ -10,3 +10,6 @@ def test_generate_report_success():
 def test_generate_report_empty():
     with pytest.raises(ValueError):
         generate_report([])
+
+if __name__ == "__main__":
+    test_generate_report_success()

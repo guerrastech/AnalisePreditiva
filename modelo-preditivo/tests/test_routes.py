@@ -12,6 +12,7 @@ model = pickle.load(open(os.path.abspath(model_path), 'rb'))
 # Importa a função create_app de __init__.py
 from app import create_app
 
+
 # Cria a instância do app Flask
 app = create_app()
 

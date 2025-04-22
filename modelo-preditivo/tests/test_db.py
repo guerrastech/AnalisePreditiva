@@ -14,6 +14,6 @@ def test_mongodb_connection():
         print(f"❌ Erro ao conectar com o MongoDB: {e}")
         assert False, f"Erro ao conectar com o MongoDB: {e}"
 
-# 👇 Esta chamada é essencial
+
 if __name__ == "__main__":
     test_mongodb_connection()
