@@ -21,6 +21,7 @@
           <li><a href="/home">Home</a></li>
           <li><a href="/NovaConsulta">Nova Consulta</a></li>
           <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="/logout">Logout</a></li>
         </ul>
       </nav>
     </header>
@@ -43,10 +44,10 @@
     </div>
 
 
-    <div class="titulos">
+    <!-- <div class="titulos">
       <h3>Dados Armazenados</h3>
       <button id="btn-mostrar-tabela" class="btn-tabela">Mostrar Tabela</button>
-    </div>
+    </div> -->
 
     <div style="text-align: center; margin-top: 20px;">
       <a href="/exportar-relatorio">
@@ -55,28 +56,37 @@
     </div>
     
     
-    <div id="tabela-container" style="display: none;">
+    <div class="tabela-container" id="tabela-container" style="display: block;">
       <table>
-        <tr>
-          <th>Idade</th>
-          <th>Gênero</th>
-          <th>Ocupação</th>
-          <th>Educação</th>
-          <th>Capital Ganho</th>
-          <th>Previsão</th>
-        </tr>
-        {% for d in dados %}
-        <tr>
-          <td>{{ d.idade }}</td>
-          <td>{{ d.genero }}</td>
-          <td>{{ d.ocupacao }}</td>
-          <td>{{ d.educacao }}</td>
-          <td>{{ d.capital_gain }}</td>
-          <td>{{ d.previsao }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+          <tr>
+            <th>Idade</th>
+            <th>Gênero</th>
+            <th>Ocupação</th>
+            <th>Educação</th>
+            <th>Capital Ganho</th>
+            <th>Previsão</th>
+          </tr>
+        </thead>
       </table>
+      <div class="tabela-scroll">
+        <table>
+          <tbody>
+            {% for d in dados %}
+            <tr>
+              <td>{{ d.idade }}</td>
+              <td>{{ d.genero }}</td>
+              <td>{{ d.ocupacao }}</td>
+              <td>{{ d.educacao }}</td>
+              <td>{{ d.capital_gain }}</td>
+              <td>{{ d.previsao }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
+    
     
 
 

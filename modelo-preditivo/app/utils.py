@@ -50,6 +50,6 @@ def exportar_relatorio_pdf(path, estatisticas):
                 c.showPage()
                 y = height - 50
 
-        y -= 10  # espaço extra entre blocos
+        y -= 10
 
     c.save()

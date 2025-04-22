@@ -20,7 +20,13 @@
 
       <button type="submit">Entrar</button>
 
-      
+      {% with mensagens = get_flashed_messages(with_categories=true) %}
+  {% if mensagens %}
+    {% for categoria, msg in mensagens %}
+      <div class="mensagem-topo">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 
       {% if erro %}
@@ -34,4 +40,19 @@
     </form>
   </div>
 </body>
+
+
+<script>
+  // Esconde automaticamente a mensagem após 4 segundos
+  setTimeout(() => {
+    const mensagem = document.querySelector('.mensagem-topo');
+    if (mensagem) {
+      mensagem.style.transition = 'opacity 0.5s ease';
+      mensagem.style.opacity = '0';
+      setTimeout(() => mensagem.remove(), 500); 
+    }
+  }, 4000);
+</script>
+
+
 </html>

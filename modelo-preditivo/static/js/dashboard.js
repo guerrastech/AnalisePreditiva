@@ -112,7 +112,7 @@ document.getElementById("select-grafico").addEventListener("change", (e) => {
 criarGrafico("classes");
 
 // Botão mostrar/ocultar tabela
-document.getElementById("btn-mostrar-tabela").addEventListener("click", () => {
-  const tabela = document.getElementById("tabela-container");
-  tabela.style.display = tabela.style.display === "none" ? "block" : "none";
-});
+// document.getElementById("btn-mostrar-tabela").addEventListener("click", () => {
+//   const tabela = document.getElementById("tabela-container");
+//   tabela.style.display = tabela.style.display === "none" ? "block" : "none";
+// });

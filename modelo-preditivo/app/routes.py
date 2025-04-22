@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, send_file
+from flask import Blueprint, render_template, request, redirect, send_file, session, flash
 import numpy as np
 import pickle
 from collections import Counter
 from app.conexaoBD import connect_database
-from app.utils import resultado_ocupacao, traduzir_genero, exportar_relatorio_pdf
+from app.utils import resultado_ocupacao, exportar_relatorio_pdf
 from werkzeug.security import check_password_hash, generate_password_hash
 from app.analises import (
     preparar_dados, analise_renda_total, analise_genero_renda,
@@ -164,25 +164,7 @@ def cadastro():
                 "email": email,
                 "senha": senha_hash  # Armazena a senha de forma segura
             })
-            return redirect("/login")
-
-    return render_template("cadastro.html", erro=erro)
-    erro = None
-    if request.method == "POST":
-        nome = request.form["nome"]
-        email = request.form["email"]
-        senha = request.form["senha"]
-
-        # Salvar os usuarios no MongoDB
-        if not nome or not email or not senha:
-            erro = "Todos os campos são obrigatórios"
-        else:
-            # Salva o usuário
-            db['usuarios'].insert_one({
-                "nome": nome,
-                "email": email,
-                "senha": senha  
-            })
+            flash("Cadastro realizado com sucesso!", "sucesso")
             return redirect("/login")
 
     return render_template("cadastro.html", erro=erro)
@@ -195,13 +177,13 @@ def login():
         usuario = request.form["usuario"]
         senha = request.form["senha"]
 
-        # Aqui você deve usar db['usuarios'] para acessar a coleção de usuários
-        usuario_db = db['usuarios'].find_one({"email": usuario})  # Ou "usuario" se o campo for usuário
+        
+        usuario_db = db['usuarios'].find_one({"email": usuario})
 
         # Verificação de usuario
         if usuario_db:
-            # Verifica se a senha fornecida é válida
             if check_password_hash(usuario_db["senha"], senha):
+                print("usuario logado com sucesso")
                 return redirect("/dashboard")
             else:
                 erro = "Usuário ou senha incorretos"
@@ -210,23 +192,12 @@ def login():
 
     return render_template("login.html", erro=erro)
 
-    erro = None
-    if request.method == "POST":
-        usuario = request.form["usuario"]
-        senha = request.form["senha"]
 
-        usuario_db = mongo.db.usuarios.find_one({"usuario": usuario})
+@main.route('/logout', methods=['POST' , 'GET'])
+def logout():
+    session.clear()
+    return redirect('login')
 
-
-        # Verificação de usuario
-        if usuario_db:
-            # Verifica se a senha fornecida é válida
-            if check_password_hash(usuario_db["senha"], senha):
-                return redirect("/dashboard")
-            else:
-                erro = "Usuário ou senha incorretos"
-        else:
-            erro = "Usuário ou senha incorretos"
-
-    return render_template("login.html", erro=erro)
-
+@main.route("/")
+def raiz():
+    return redirect("/login")

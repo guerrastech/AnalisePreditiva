@@ -131,6 +131,9 @@ Este projeto está licenciado sob a [Licença MIT](LICENSE).
 ## 👥 Equipe
 
 - [Gabriel Guerra](https://github.com/guerrastech) - Desenvolvedor Backend
-
+- [Jhenniffer Yasmin](https://github.com/Jennyasmim) - Grente de testes
+- [Kayo Vinicius](https://github.com/Kirack18) - Desenvolvedor Frontend
+- [Mauricio Gomes](https://github.com/mauriciogonrails) - Analista de dados
+- [Jonatha Manoel](https://github.com/JonathaSantosADS) - Design
 
 

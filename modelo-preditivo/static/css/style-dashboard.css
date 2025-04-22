@@ -84,30 +84,45 @@ select:focus {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 } 
 
-/* Tabela de dados */
-table {
-  margin: 40px auto;
-  border-collapse: collapse;
+.tabela-container {
   width: 85%;
-  background-color: #fff;
+  margin: 40px auto;
   border-radius: 10px;
-  overflow: hidden;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-table th, table td {
+.tabela-container > table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.tabela-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.tabela-scroll table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+thead th {
+  background-color: #1e90ff;
+  color: white;
+  font-weight: bold;
+  padding: 12px 18px;
+  text-align: center;
+}
+
+tbody td {
   padding: 12px 18px;
   text-align: center;
   border-bottom: 1px solid #e0e0e0;
 }
 
-table th {
-  background-color: #1e90ff;
-  color: white;
-  font-weight: bold;
-}
-
-table tr:hover {
+tbody tr:hover {
   background-color: #f1f9ff;
 }
 
@@ -128,6 +143,6 @@ table tr:hover {
 
 .btn-tabela:hover {
   background-color: #104e8b;
-}
+} 
 
 
